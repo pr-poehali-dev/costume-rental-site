@@ -234,10 +234,6 @@ export default function Index() {
               <span>Удобный календарь</span>
             </div>
             <div className="flex items-center gap-2">
-              <Icon name="Sparkles" size={24} />
-              <span>Чистка и глажка</span>
-            </div>
-            <div className="flex items-center gap-2">
               <Icon name="Truck" size={24} />
               <span>Доставка</span>
             </div>
