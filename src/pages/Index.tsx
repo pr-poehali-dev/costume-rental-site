@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar } from '@/components/ui/calendar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
@@ -88,9 +87,6 @@ export default function Index() {
   const [selectedTheme, setSelectedTheme] = useState<string>('all');
   const [selectedGender, setSelectedGender] = useState<string>('all');
   const [cart, setCart] = useState<{ costume: Costume; date: Date | undefined }[]>([]);
-  const [filterTab, setFilterTab] = useState<string>('simple');
-  const [smartAge, setSmartAge] = useState<string>('');
-  const [smartEvent, setSmartEvent] = useState<string>('');
 
   const filteredCostumes = costumes.filter((costume) => {
     if (selectedAge !== 'all' && costume.age !== selectedAge) return false;
@@ -98,28 +94,6 @@ export default function Index() {
     if (selectedGender !== 'all' && costume.gender !== selectedGender && costume.gender !== 'любой') return false;
     return true;
   });
-
-  const smartFilteredCostumes = () => {
-    if (filterTab !== 'smart') return filteredCostumes;
-
-    let results = costumes;
-
-    if (smartAge) {
-      results = results.filter((c) => c.age === smartAge);
-    }
-
-    if (smartEvent === 'день рождения') {
-      results = results.filter((c) => ['супергерои', 'сказки', 'приключения'].includes(c.theme));
-    } else if (smartEvent === 'новый год') {
-      results = results.filter((c) => ['сказки', 'волшебство'].includes(c.theme));
-    } else if (smartEvent === 'карнавал') {
-      results = results.filter((c) => ['природа', 'космос', 'приключения'].includes(c.theme));
-    }
-
-    return results;
-  };
-
-  const displayedCostumes = filterTab === 'smart' ? smartFilteredCostumes() : filteredCostumes;
 
   const addToCart = (costume: Costume, date: Date | undefined) => {
     setCart([...cart, { costume, date }]);
@@ -139,76 +113,68 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-purple-200 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
+    <div className="min-h-screen bg-white">
+      <header className="border-b border-gray-200">
+        <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="text-4xl">🎭</div>
-              <div>
-                <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600">
-                  МаскаРад
-                </h1>
-                <p className="text-sm text-gray-600">Аренда детских костюмов</p>
-              </div>
+              <h1 className="text-2xl font-light tracking-wide text-gray-900">
+                МаскаРад
+              </h1>
             </div>
 
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="lg" className="relative">
-                  <Icon name="ShoppingCart" size={20} />
+                <Button variant="ghost" size="icon" className="relative">
+                  <Icon name="ShoppingBag" size={20} />
                   {cart.length > 0 && (
-                    <Badge className="absolute -top-2 -right-2 bg-pink-500 hover:bg-pink-600">
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-black text-white text-xs rounded-full flex items-center justify-center">
                       {cart.length}
-                    </Badge>
+                    </span>
                   )}
                 </Button>
               </SheetTrigger>
-              <SheetContent>
+              <SheetContent className="bg-white">
                 <SheetHeader>
-                  <SheetTitle>Корзина заказов</SheetTitle>
+                  <SheetTitle className="font-light">Корзина</SheetTitle>
                 </SheetHeader>
-                <div className="mt-6 space-y-4">
+                <div className="mt-8 space-y-4">
                   {cart.length === 0 ? (
-                    <p className="text-center text-gray-500 py-8">Корзина пуста</p>
+                    <p className="text-center text-gray-400 py-8">Пусто</p>
                   ) : (
                     <>
                       {cart.map((item, index) => (
-                        <Card key={index}>
-                          <CardContent className="pt-4">
-                            <div className="flex items-start gap-3">
-                              <img
-                                src={item.costume.image}
-                                alt={item.costume.name}
-                                className="w-16 h-16 object-cover rounded-lg"
-                              />
-                              <div className="flex-1">
-                                <h4 className="font-semibold">{item.costume.name}</h4>
-                                <p className="text-sm text-gray-600">
-                                  {item.date ? item.date.toLocaleDateString('ru-RU') : 'Дата не выбрана'}
-                                </p>
-                                <p className="text-sm font-semibold text-purple-600">{item.costume.price} ₽</p>
-                              </div>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => removeFromCart(index)}
-                              >
-                                <Icon name="Trash2" size={16} />
-                              </Button>
-                            </div>
-                          </CardContent>
-                        </Card>
+                        <div key={index} className="flex items-start gap-3 pb-4 border-b border-gray-100">
+                          <img
+                            src={item.costume.image}
+                            alt={item.costume.name}
+                            className="w-16 h-16 object-cover"
+                          />
+                          <div className="flex-1">
+                            <h4 className="font-normal text-sm">{item.costume.name}</h4>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {item.date ? item.date.toLocaleDateString('ru-RU') : 'Дата не выбрана'}
+                            </p>
+                            <p className="text-sm mt-1">{item.costume.price} ₽</p>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeFromCart(index)}
+                          >
+                            <Icon name="X" size={16} />
+                          </Button>
+                        </div>
                       ))}
-                      <div className="pt-4 border-t">
+                      <div className="pt-4">
                         <div className="flex justify-between items-center mb-4">
-                          <span className="font-semibold">Итого:</span>
-                          <span className="text-xl font-bold text-purple-600">
+                          <span className="text-sm">Итого</span>
+                          <span className="text-lg font-normal">
                             {cart.reduce((sum, item) => sum + item.costume.price, 0)} ₽
                           </span>
                         </div>
-                        <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-                          Оформить заказ
+                        <Button className="w-full bg-black text-white hover:bg-gray-800">
+                          Оформить
                         </Button>
                       </div>
                     </>
@@ -220,269 +186,165 @@ export default function Index() {
         </div>
       </header>
 
-      <section className="py-12 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-5xl font-bold mb-4 animate-fade-in">
-            Волшебный мир костюмов! ✨
+      <section className="py-16 border-b border-gray-100">
+        <div className="container mx-auto px-4 text-center max-w-2xl">
+          <h2 className="text-4xl font-light mb-4 text-gray-900">
+            Аренда детских костюмов
           </h2>
-          <p className="text-xl mb-8 opacity-90">
-            Превратите праздник в сказку — более 100 костюмов для вашего ребенка
+          <p className="text-gray-600">
+            Костюмы для любого праздника с доставкой по улусу
           </p>
-          <div className="flex flex-wrap justify-center gap-4 text-lg">
-            <div className="flex items-center gap-2">
-              <Icon name="Calendar" size={24} />
-              <span>Удобный календарь</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Icon name="Truck" size={24} />
-              <span>Доставка по улусу</span>
-            </div>
-          </div>
         </div>
       </section>
 
       <div className="container mx-auto px-4 py-12">
-        <Tabs value={filterTab} onValueChange={setFilterTab} className="mb-8">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
-            <TabsTrigger value="simple">Фильтры</TabsTrigger>
-            <TabsTrigger value="smart">
-              <Icon name="Sparkles" size={16} className="mr-2" />
-              Умный подбор
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="simple" className="space-y-4">
-            <div className="grid md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-semibold mb-2">Возраст</label>
-                <Select value={selectedAge} onValueChange={setSelectedAge}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Выберите возраст" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Все возрасты</SelectItem>
-                    <SelectItem value="3-5">3-5 лет</SelectItem>
-                    <SelectItem value="5-7">5-7 лет</SelectItem>
-                    <SelectItem value="7-10">7-10 лет</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2">Тематика</label>
-                <Select value={selectedTheme} onValueChange={setSelectedTheme}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Выберите тему" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Все темы</SelectItem>
-                    <SelectItem value="супергерои">Супергерои</SelectItem>
-                    <SelectItem value="сказки">Сказки</SelectItem>
-                    <SelectItem value="приключения">Приключения</SelectItem>
-                    <SelectItem value="природа">Природа</SelectItem>
-                    <SelectItem value="космос">Космос</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2">Пол ребенка</label>
-                <Select value={selectedGender} onValueChange={setSelectedGender}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Выберите пол" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Любой</SelectItem>
-                    <SelectItem value="мальчик">Мальчик</SelectItem>
-                    <SelectItem value="девочка">Девочка</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+        <div className="mb-12">
+          <div className="grid md:grid-cols-3 gap-4 max-w-3xl">
+            <div>
+              <label className="block text-xs text-gray-500 mb-2">Возраст</label>
+              <Select value={selectedAge} onValueChange={setSelectedAge}>
+                <SelectTrigger className="border-gray-200">
+                  <SelectValue placeholder="Все" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все</SelectItem>
+                  <SelectItem value="3-5">3-5 лет</SelectItem>
+                  <SelectItem value="5-7">5-7 лет</SelectItem>
+                  <SelectItem value="7-10">7-10 лет</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-          </TabsContent>
 
-          <TabsContent value="smart" className="space-y-4">
-            <Card className="bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-300">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Icon name="Sparkles" size={20} />
-                  Умная система подбора
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold mb-2">Возраст ребенка</label>
-                  <Select value={smartAge} onValueChange={setSmartAge}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Сколько лет ребенку?" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="3-5">3-5 лет</SelectItem>
-                      <SelectItem value="5-7">5-7 лет</SelectItem>
-                      <SelectItem value="7-10">7-10 лет</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-2">Тематика</label>
+              <Select value={selectedTheme} onValueChange={setSelectedTheme}>
+                <SelectTrigger className="border-gray-200">
+                  <SelectValue placeholder="Все" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все</SelectItem>
+                  <SelectItem value="супергерои">Супергерои</SelectItem>
+                  <SelectItem value="сказки">Сказки</SelectItem>
+                  <SelectItem value="приключения">Приключения</SelectItem>
+                  <SelectItem value="природа">Природа</SelectItem>
+                  <SelectItem value="космос">Космос</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-                <div>
-                  <label className="block text-sm font-semibold mb-2">Для какого события?</label>
-                  <Select value={smartEvent} onValueChange={setSmartEvent}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите событие" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="день рождения">День рождения</SelectItem>
-                      <SelectItem value="новый год">Новый год</SelectItem>
-                      <SelectItem value="карнавал">Карнавал</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {smartAge && smartEvent && (
-                  <div className="p-4 bg-white rounded-lg">
-                    <p className="text-sm text-gray-700">
-                      <Icon name="CheckCircle2" size={16} className="inline mr-2 text-green-600" />
-                      Подобрано <strong>{smartFilteredCostumes().length}</strong> костюмов для{' '}
-                      {smartEvent} (возраст {smartAge})
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-
-        <div className="mb-6 flex items-center justify-between">
-          <h3 className="text-2xl font-bold">
-            Каталог костюмов
-            <Badge variant="secondary" className="ml-3">
-              {displayedCostumes.length} шт.
-            </Badge>
-          </h3>
+            <div>
+              <label className="block text-xs text-gray-500 mb-2">Пол</label>
+              <Select value={selectedGender} onValueChange={setSelectedGender}>
+                <SelectTrigger className="border-gray-200">
+                  <SelectValue placeholder="Любой" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Любой</SelectItem>
+                  <SelectItem value="мальчик">Мальчик</SelectItem>
+                  <SelectItem value="девочка">Девочка</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayedCostumes.map((costume) => (
-            <Card
-              key={costume.id}
-              className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-scale-in"
-            >
-              <CardHeader className="p-0">
-                <div className="relative">
-                  <img
-                    src={costume.image}
-                    alt={costume.name}
-                    className="w-full h-64 object-cover"
-                  />
-                  <Badge className="absolute top-3 right-3 bg-purple-600">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredCostumes.map((costume) => (
+            <Card key={costume.id} className="border-0 shadow-none group cursor-pointer">
+              <div className="relative overflow-hidden mb-4 bg-gray-50">
+                <img
+                  src={costume.image}
+                  alt={costume.name}
+                  className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <CardContent className="p-0">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-lg font-normal">{costume.name}</h3>
+                  <Badge variant="outline" className="border-gray-300 text-gray-600 font-light">
                     {costume.age} лет
                   </Badge>
                 </div>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <CardTitle className="mb-2">{costume.name}</CardTitle>
-                <div className="flex flex-wrap gap-2 mb-3">
-                  <Badge variant="outline">{costume.theme}</Badge>
-                  <Badge variant="outline">{costume.gender}</Badge>
-                </div>
-                <p className="text-2xl font-bold text-purple-600">{costume.price} ₽/день</p>
-              </CardContent>
-              <CardFooter className="gap-2">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" className="flex-1">
-                      <Icon name="Calendar" size={16} className="mr-2" />
-                      Календарь
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-md">
-                    <DialogHeader>
-                      <DialogTitle>{costume.name} — Доступность</DialogTitle>
-                    </DialogHeader>
-                    <Calendar
-                      mode="single"
-                      className="rounded-md border"
-                      modifiers={{
-                        booked: costume.bookedDates,
-                      }}
-                      modifiersStyles={{
-                        booked: {
-                          backgroundColor: '#ef4444',
-                          color: 'white',
-                          fontWeight: 'bold',
-                        },
-                      }}
-                      disabled={(date) => isDateBooked(date, costume)}
-                    />
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 bg-red-500 rounded"></div>
-                        <span>Занято</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 bg-purple-600 rounded"></div>
-                        <span>Доступно для аренды</span>
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <p className="text-sm text-gray-500 mb-4">{costume.theme}</p>
+                <div className="flex items-center justify-between">
+                  <p className="text-lg">{costume.price} ₽</p>
+                  <div className="flex gap-2">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="ghost" size="sm" className="text-gray-600">
+                          <Icon name="Calendar" size={16} />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-md bg-white">
+                        <DialogHeader>
+                          <DialogTitle className="font-light">{costume.name}</DialogTitle>
+                        </DialogHeader>
+                        <Calendar
+                          mode="single"
+                          className="rounded-md border-0"
+                          modifiers={{
+                            booked: costume.bookedDates,
+                          }}
+                          modifiersStyles={{
+                            booked: {
+                              backgroundColor: '#e5e5e5',
+                              color: '#737373',
+                              textDecoration: 'line-through',
+                            },
+                          }}
+                          disabled={(date) => isDateBooked(date, costume)}
+                        />
+                      </DialogContent>
+                    </Dialog>
 
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-                      <Icon name="Plus" size={16} className="mr-2" />
-                      Арендовать
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Выберите дату аренды</DialogTitle>
-                    </DialogHeader>
-                    <Calendar
-                      mode="single"
-                      onSelect={(date) => {
-                        if (date && !isDateBooked(date, costume)) {
-                          addToCart(costume, date);
-                        }
-                      }}
-                      className="rounded-md border"
-                      modifiers={{
-                        booked: costume.bookedDates,
-                      }}
-                      modifiersStyles={{
-                        booked: {
-                          backgroundColor: '#ef4444',
-                          color: 'white',
-                          fontWeight: 'bold',
-                        },
-                      }}
-                      disabled={(date) => isDateBooked(date, costume)}
-                    />
-                    <p className="text-sm text-gray-600">
-                      Выберите свободную дату для аренды костюма
-                    </p>
-                  </DialogContent>
-                </Dialog>
-              </CardFooter>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button size="sm" className="bg-black text-white hover:bg-gray-800">
+                          Выбрать
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="bg-white">
+                        <DialogHeader>
+                          <DialogTitle className="font-light">Выберите дату</DialogTitle>
+                        </DialogHeader>
+                        <Calendar
+                          mode="single"
+                          onSelect={(date) => {
+                            if (date && !isDateBooked(date, costume)) {
+                              addToCart(costume, date);
+                            }
+                          }}
+                          className="rounded-md border-0"
+                          modifiers={{
+                            booked: costume.bookedDates,
+                          }}
+                          modifiersStyles={{
+                            booked: {
+                              backgroundColor: '#e5e5e5',
+                              color: '#737373',
+                              textDecoration: 'line-through',
+                            },
+                          }}
+                          disabled={(date) => isDateBooked(date, costume)}
+                        />
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </div>
+              </CardContent>
             </Card>
           ))}
         </div>
 
-        {displayedCostumes.length === 0 && (
+        {filteredCostumes.length === 0 && (
           <div className="text-center py-16">
-            <div className="text-6xl mb-4">🎭</div>
-            <p className="text-xl text-gray-600">
-              Костюмы по выбранным фильтрам не найдены
-            </p>
+            <p className="text-gray-400 mb-4">Костюмов не найдено</p>
             <Button
-              variant="outline"
-              className="mt-4"
+              variant="ghost"
               onClick={() => {
                 setSelectedAge('all');
                 setSelectedTheme('all');
                 setSelectedGender('all');
-                setSmartAge('');
-                setSmartEvent('');
               }}
             >
               Сбросить фильтры
@@ -491,35 +353,29 @@ export default function Index() {
         )}
       </div>
 
-      <footer className="bg-gradient-to-r from-purple-900 via-pink-900 to-orange-900 text-white py-12 mt-16">
+      <footer className="border-t border-gray-200 py-12 mt-16">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 text-sm">
             <div>
-              <h4 className="font-bold text-xl mb-4">МаскаРад</h4>
-              <p className="text-purple-200">
-                Аренда детских маскарадных костюмов для любого праздника
+              <h4 className="font-normal mb-3">МаскаРад</h4>
+              <p className="text-gray-500 text-xs leading-relaxed">
+                Аренда детских костюмов для праздников
               </p>
             </div>
             <div>
-              <h4 className="font-bold text-xl mb-4">Контакты</h4>
-              <div className="space-y-2 text-purple-200">
-                <p className="flex items-center gap-2">
-                  <Icon name="Phone" size={16} />
-                  +7 (999) 123-45-67
-                </p>
-                <p className="flex items-center gap-2">
-                  <Icon name="Mail" size={16} />
-                  info@maskarad.ru
-                </p>
+              <h4 className="font-normal mb-3">Контакты</h4>
+              <div className="space-y-2 text-xs text-gray-500">
+                <p>+7 (999) 123-45-67</p>
+                <p>info@maskarad.ru</p>
               </div>
             </div>
             <div>
-              <h4 className="font-bold text-xl mb-4">Доставка</h4>
-              <ul className="space-y-2 text-purple-200">
-                <li>✓ Борогонцы</li>
-                <li>✓ Маягасцы</li>
-                <li>✓ Чаран</li>
-                <li>✓ Мындаба</li>
+              <h4 className="font-normal mb-3">Доставка</h4>
+              <ul className="space-y-2 text-xs text-gray-500">
+                <li>Борогонцы</li>
+                <li>Маягасцы</li>
+                <li>Чаран</li>
+                <li>Мындаба</li>
               </ul>
             </div>
           </div>
