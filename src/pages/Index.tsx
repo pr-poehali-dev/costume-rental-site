@@ -235,7 +235,7 @@ export default function Index() {
             </div>
             <div className="flex items-center gap-2">
               <Icon name="Truck" size={24} />
-              <span>Доставка</span>
+              <span>Доставка по улусу</span>
             </div>
           </div>
         </div>
@@ -514,11 +514,12 @@ export default function Index() {
               </div>
             </div>
             <div>
-              <h4 className="font-bold text-xl mb-4">Условия аренды</h4>
+              <h4 className="font-bold text-xl mb-4">Доставка</h4>
               <ul className="space-y-2 text-purple-200">
-                <li>✓ Минимальный срок — 1 день</li>
-                <li>✓ Доставка по городу</li>
-                <li>✓ Профессиональная чистка</li>
+                <li>✓ Борогонцы</li>
+                <li>✓ Маягасцы</li>
+                <li>✓ Чаран</li>
+                <li>✓ Мындаба</li>
               </ul>
             </div>
           </div>
