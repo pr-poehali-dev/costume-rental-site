@@ -113,12 +113,12 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="border-b border-gray-200">
+    <div className="min-h-screen bg-amber-50">
+      <header className="border-b border-amber-200 bg-white">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-light tracking-wide text-gray-900">
+              <h1 className="text-2xl font-light tracking-wide text-amber-900">
                 МаскаРад
               </h1>
             </div>
@@ -128,7 +128,7 @@ export default function Index() {
                 <Button variant="ghost" size="icon" className="relative">
                   <Icon name="ShoppingBag" size={20} />
                   {cart.length > 0 && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-black text-white text-xs rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-amber-900 text-white text-xs rounded-full flex items-center justify-center">
                       {cart.length}
                     </span>
                   )}
@@ -173,7 +173,7 @@ export default function Index() {
                             {cart.reduce((sum, item) => sum + item.costume.price, 0)} ₽
                           </span>
                         </div>
-                        <Button className="w-full bg-black text-white hover:bg-gray-800">
+                        <Button className="w-full bg-amber-900 text-white hover:bg-amber-800">
                           Оформить
                         </Button>
                       </div>
@@ -186,12 +186,12 @@ export default function Index() {
         </div>
       </header>
 
-      <section className="py-16 border-b border-gray-100">
+      <section className="py-16 border-b border-amber-100 bg-white">
         <div className="container mx-auto px-4 text-center max-w-2xl">
-          <h2 className="text-4xl font-light mb-4 text-gray-900">
+          <h2 className="text-4xl font-light mb-4 text-amber-900">
             Аренда детских костюмов
           </h2>
-          <p className="text-gray-600">
+          <p className="text-amber-800/70">
             Костюмы для любого праздника с доставкой по улусу
           </p>
         </div>
@@ -201,9 +201,9 @@ export default function Index() {
         <div className="mb-12">
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl">
             <div>
-              <label className="block text-xs text-gray-500 mb-2">Возраст</label>
+              <label className="block text-xs text-amber-700 mb-2">Возраст</label>
               <Select value={selectedAge} onValueChange={setSelectedAge}>
-                <SelectTrigger className="border-gray-200">
+                <SelectTrigger className="border-amber-200 bg-white">
                   <SelectValue placeholder="Все" />
                 </SelectTrigger>
                 <SelectContent>
@@ -216,9 +216,9 @@ export default function Index() {
             </div>
 
             <div>
-              <label className="block text-xs text-gray-500 mb-2">Тематика</label>
+              <label className="block text-xs text-amber-700 mb-2">Тематика</label>
               <Select value={selectedTheme} onValueChange={setSelectedTheme}>
-                <SelectTrigger className="border-gray-200">
+                <SelectTrigger className="border-amber-200 bg-white">
                   <SelectValue placeholder="Все" />
                 </SelectTrigger>
                 <SelectContent>
@@ -233,9 +233,9 @@ export default function Index() {
             </div>
 
             <div>
-              <label className="block text-xs text-gray-500 mb-2">Пол</label>
+              <label className="block text-xs text-amber-700 mb-2">Пол</label>
               <Select value={selectedGender} onValueChange={setSelectedGender}>
-                <SelectTrigger className="border-gray-200">
+                <SelectTrigger className="border-amber-200 bg-white">
                   <SelectValue placeholder="Любой" />
                 </SelectTrigger>
                 <SelectContent>
@@ -251,7 +251,7 @@ export default function Index() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredCostumes.map((costume) => (
             <Card key={costume.id} className="border-0 shadow-none group cursor-pointer">
-              <div className="relative overflow-hidden mb-4 bg-gray-50">
+              <div className="relative overflow-hidden mb-4 bg-white">
                 <img
                   src={costume.image}
                   alt={costume.name}
@@ -261,17 +261,17 @@ export default function Index() {
               <CardContent className="p-0">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-lg font-normal">{costume.name}</h3>
-                  <Badge variant="outline" className="border-gray-300 text-gray-600 font-light">
+                  <Badge variant="outline" className="border-amber-300 text-amber-700 font-light">
                     {costume.age} лет
                   </Badge>
                 </div>
-                <p className="text-sm text-gray-500 mb-4">{costume.theme}</p>
+                <p className="text-sm text-amber-600 mb-4">{costume.theme}</p>
                 <div className="flex items-center justify-between">
                   <p className="text-lg">{costume.price} ₽</p>
                   <div className="flex gap-2">
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button variant="ghost" size="sm" className="text-gray-600">
+                        <Button variant="ghost" size="sm" className="text-amber-700">
                           <Icon name="Calendar" size={16} />
                         </Button>
                       </DialogTrigger>
@@ -299,7 +299,7 @@ export default function Index() {
 
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button size="sm" className="bg-black text-white hover:bg-gray-800">
+                        <Button size="sm" className="bg-amber-900 text-white hover:bg-amber-800">
                           Выбрать
                         </Button>
                       </DialogTrigger>
@@ -338,7 +338,7 @@ export default function Index() {
 
         {filteredCostumes.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-gray-400 mb-4">Костюмов не найдено</p>
+            <p className="text-amber-600 mb-4">Костюмов не найдено</p>
             <Button
               variant="ghost"
               onClick={() => {
@@ -353,25 +353,25 @@ export default function Index() {
         )}
       </div>
 
-      <footer className="border-t border-gray-200 py-12 mt-16">
+      <footer className="border-t border-amber-200 py-12 mt-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 text-sm">
             <div>
               <h4 className="font-normal mb-3">МаскаРад</h4>
-              <p className="text-gray-500 text-xs leading-relaxed">
+              <p className="text-amber-700 text-xs leading-relaxed">
                 Аренда детских костюмов для праздников
               </p>
             </div>
             <div>
               <h4 className="font-normal mb-3">Контакты</h4>
-              <div className="space-y-2 text-xs text-gray-500">
+              <div className="space-y-2 text-xs text-amber-700">
                 <p>+7 (999) 123-45-67</p>
                 <p>info@maskarad.ru</p>
               </div>
             </div>
             <div>
               <h4 className="font-normal mb-3">Доставка</h4>
-              <ul className="space-y-2 text-xs text-gray-500">
+              <ul className="space-y-2 text-xs text-amber-700">
                 <li>Борогонцы</li>
                 <li>Маягасцы</li>
                 <li>Чаран</li>
