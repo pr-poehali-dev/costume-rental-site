@@ -119,7 +119,7 @@ export default function Index() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-light tracking-wide text-amber-900">
-                МаскаРад
+                Irina's masquerade
               </h1>
             </div>
 
@@ -189,10 +189,10 @@ export default function Index() {
       <section className="py-16 border-b border-amber-100 bg-white">
         <div className="container mx-auto px-4 text-center max-w-2xl">
           <h2 className="text-4xl font-light mb-4 text-amber-900">
-            Аренда детских костюмов
+            Аренда костюмов и маскарада
           </h2>
           <p className="text-amber-800/70">
-            Костюмы для любого праздника с доставкой по улусу
+            Эксклюзивные образы для незабываемых моментов
           </p>
         </div>
       </section>
@@ -365,8 +365,8 @@ export default function Index() {
             <div>
               <h4 className="font-normal mb-3">Контакты</h4>
               <div className="space-y-2 text-xs text-amber-700">
-                <p>+7 (999) 123-45-67</p>
-                <p>info@maskarad.ru</p>
+                <p>+7 (962) 737-64-58</p>
+                <p>+7 (914) 264-04-37</p>
               </div>
             </div>
             <div>
